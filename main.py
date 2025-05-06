@@ -12,7 +12,7 @@
 # - Prosty model regresyjny przewidujacy wzrost sily na podstawie danych
 # - GUI z mozliwoscia zmiany motywu / dark mode
 
-from Data.db_config import *
+from Data.db_configg import *
 from Interface.render_interface import render_app
 
 if __name__ == "__main__":
