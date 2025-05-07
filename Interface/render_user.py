@@ -1,16 +1,25 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QPushButton, QLineEdit, QTableWidget, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QLabel, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QPixmap
-from PyQt5.QtCore import Qt
-from Data.db_configg import getRecordFromTable, addValuesIntoUsers
-from datetime import datetime
+from PyQt5.QtCore import Qt, pyqtSignal
+from Data.db_configg import getRecordFromTable
+from Interface.render_register import *
 
-LOGIN_SESSION_END = False
+class ClickableLabel(QLabel):
+    clicked = pyqtSignal()
+
+    def __init__(self, text='', parent=None):
+        super().__init__(text, parent)
+        self.setCursor(Qt.PointingHandCursor) 
+        self.setStyleSheet("color: black; text-decoration: underline;") 
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.clicked.emit()
 
 class User_Window(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Gym Tracker - Select User")
-        # self.setStyleSheet("background-color: #194a05;")
         self.setGeometry(600, 250, 300, 350)
         self.setFixedSize(300,350)
         self.setWindowIcon(QIcon("Interface//logo.jpg"))
@@ -19,8 +28,7 @@ class User_Window(QMainWindow):
         pixmap = QPixmap("Interface//user.jpg")
         self.image_label.setPixmap(pixmap)
         self.image_label.setScaledContents(True)
-        
-        
+
         self.enter_label = QLineEdit(self)
         self.enter_label.setPlaceholderText("Enter Username...")
         self.enter_label.setStyleSheet("""
@@ -39,6 +47,10 @@ class User_Window(QMainWindow):
         self.enter_button.setGeometry(105,240, 85, 25)
         self.enter_button.clicked.connect(self.handle_enter_button)
         
+        self.register_label = ClickableLabel("Create an account.", self)
+        self.register_label.setGeometry(102, 270, 100, 30)
+        self.register_label.clicked.connect(self.handle_register_label) 
+        
     def handle_enter_button(self):
         entered_username = str(self.enter_label.text().strip())
         if not entered_username:
@@ -46,14 +58,12 @@ class User_Window(QMainWindow):
             return
         else:
             result = getRecordFromTable(f"SELECT id FROM users WHERE username = '{entered_username}'")
-            #print("Rezultat : " + result)
             if result == "None":
-                QMessageBox.information(self, "No account", "User not found. Account has just been created.")
-                addValuesIntoUsers(entered_username, " ", str(datetime.today().strftime('%Y-%m-%d')))
-                LOGIN_SESSION_END = True
-                # Przekierowywanie do kolejnego okna
+                QMessageBox.information(self, "No account", "User not found. Try again or create an account!")
             elif result != "None":
-                QMessageBox.information(self, "Success", f"Logged as {entered_username}")
-                LOGIN_SESSION_END = True
-                # Przekierowywanie do kolejnego okna
+                QMessageBox.information(self, "Success", "Successfully logged in!")
+                
+    def handle_register_label(self):
+        self.register_window = Register_Window()
+        self.register_window.show()
         

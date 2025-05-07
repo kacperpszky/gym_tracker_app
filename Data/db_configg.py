@@ -1,6 +1,5 @@
 import psycopg2
 from urllib import request
-import json
 
 INTERNET_CONNECTION = False
 DATABASE_CONNECTION = False
@@ -11,14 +10,12 @@ DB_PASS = "1998" # tutaj wklej własny pass do swojego postgresa.
 DB_HOST = "localhost"
 DB_PORT = "5432" # jesli dzialasz na innym porcie to zmien go tutaj.
 
-
 CONN = psycopg2.connect(database=DB_NAME,
                         user=DB_USER,
                         password=DB_PASS,
                         host=DB_HOST,
                         port=DB_PORT)
 CUR = CONN.cursor()
-
 
 def check_internet():
     try:
@@ -38,10 +35,6 @@ def connect_db():
     except:
         return False
     
-    
-    
-
-
 def createTables():
     # w tabeli body_metrics w chest/arms/waist obwody. 
     CUR.execute("""
@@ -84,14 +77,12 @@ def createTables():
                     chest NUMERIC(5,2), 
                     arms NUMERIC(5,2),
                     waist NUMERIC(5,2)
-                );
-                
+                );              
                 """)
     CONN.commit()
     print("Utworzono tabele.")
     
 def getRecordFromTable(request_db):
-    # SELECT username FROM users WHERE id = 1
     CUR.execute(request_db)
     CONN.commit()
     
@@ -138,7 +129,3 @@ def addValuesIntoBody_metrics (user_id, date, weight, chest, arms, waist):
                 """, (user_id, date, weight, chest, arms, waist))
     CONN.commit()
     
-
-
-
-
