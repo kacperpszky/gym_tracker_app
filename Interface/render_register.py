@@ -2,12 +2,14 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QMessag
 from PyQt5.QtGui import QIcon, QFont, QPixmap
 from Data.db_configg import addValuesIntoUsers
 from datetime import datetime
+from Interface.utils import center_window
 
 class Register_Window(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Gym Tracker - Register User")
-        self.setGeometry(600, 250, 300, 350)
+        self.resize(300, 350)
+        center_window(self)
         self.setFixedSize(300,350)
         self.setWindowIcon(QIcon("Interface//logo.jpg"))
         self.image_label = QLabel(self)

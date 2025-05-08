@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import QMainWindow, QLabel, QWidget, QPushButton, QLineEdit, QMessageBox
-from PyQt5.QtGui import QIcon, QFont, QPixmap
+from PyQt5.QtGui import QIcon, QFont, QPixmap, QGuiApplication
 from PyQt5.QtCore import Qt, pyqtSignal
 from Data.db_configg import getRecordFromTable
 from Interface.render_register import *
+from Interface.utils import center_window
+from Interface.render_main import Main_Window
 
 class ClickableLabel(QLabel):
     clicked = pyqtSignal()
@@ -19,8 +21,9 @@ class ClickableLabel(QLabel):
 class User_Window(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.resize(300, 350)
+        center_window(self)
         self.setWindowTitle("Gym Tracker - Select User")
-        self.setGeometry(600, 250, 300, 350)
         self.setFixedSize(300,350)
         self.setWindowIcon(QIcon("Interface//logo.jpg"))
         self.image_label = QLabel(self)
@@ -61,7 +64,10 @@ class User_Window(QMainWindow):
             if result == "None":
                 QMessageBox.information(self, "No account", "User not found. Try again or create an account!")
             elif result != "None":
-                QMessageBox.information(self, "Success", "Successfully logged in!")
+                self.main_window = Main_Window(entered_username)
+                self.main_window.show()
+                self.close()
+
                 
     def handle_register_label(self):
         self.register_window = Register_Window()
