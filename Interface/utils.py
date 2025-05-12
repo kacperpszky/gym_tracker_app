@@ -10,15 +10,14 @@ def center_window(window):
     frame_geometry.moveCenter(center_point)
     window.move(frame_geometry.topLeft())
     
-    
 WORKOUT_PLAN = {
-    'Monday': 'Push Day',
-    'Tuesday':'Pull Day',
-    'Wednesday':'Legs Day',
-    'Thursday':'Cardio',
-    'Friday':'Upper Body',
-    'Saturday':'Legs + Core',
-    'Sunday':'Rest Day'
+    'Monday': '🔥 Push Day – Bench & Triceps',
+    'Tuesday':'🧲 Pull Day – Back & Biceps',
+    'Wednesday':'🦵 Legs Day – Squats Incoming',
+    'Thursday':'💨 Cardio – Move & Chill',
+    'Friday':'💪 Upper Body – Pump Day',
+    'Saturday':'🏋️ Legs + Core - Stabilize & Strengthen',
+    'Sunday':'🛌 Rest Day – Recharge Mode'
 }
 
 def getDayWorkout():
