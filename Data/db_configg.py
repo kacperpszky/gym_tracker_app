@@ -94,6 +94,19 @@ def getRecordFromTable(request_db):
     
     return result
 
+def getRecordsFromTable(request_db):
+    CUR.execute(request_db)
+    CONN.commit()
+    
+    results = CUR.fetchall()
+
+    cleaned_results = []
+    for row in results:
+        cleaned_row = ''.join(str(val) for val in row)
+        cleaned_results.append(cleaned_row)
+    
+    return cleaned_results
+
 def addValuesIntoUsers(username, email, created_at):
     CUR.execute(f"""
                 INSERT INTO users (username, email, created_at) 

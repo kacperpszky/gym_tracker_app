@@ -13,7 +13,7 @@ def center_window(window):
 WORKOUT_PLAN = {
     'Monday': '🔥 Push Day – Bench & Triceps',
     'Tuesday':'🧲 Pull Day – Back & Biceps',
-    'Wednesday':'🦵 Legs Day – Squats Incoming',
+    'Wednesday':'🦵 Legs Day - Squats Incoming',
     'Thursday':'💨 Cardio – Move & Chill',
     'Friday':'💪 Upper Body – Pump Day',
     'Saturday':'🏋️ Legs + Core - Stabilize & Strengthen',

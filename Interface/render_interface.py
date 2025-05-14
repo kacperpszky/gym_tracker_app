@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 
 def render_app():
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
     window_user = User_Window()
     window_user.show()
     sys.exit(app.exec_())

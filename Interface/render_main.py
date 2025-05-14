@@ -1,13 +1,75 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QLabel, QWidget, QPushButton, QLineEdit, QStackedWidget
+from PyQt5.QtWidgets import QMainWindow, QLabel, QWidget, QPushButton, QLineEdit, QStackedWidget, QComboBox, QTextEdit, QListWidget
 from PyQt5.QtGui import QIcon, QFont, QPixmap
 from PyQt5.QtCore import Qt, QTimer, QTime
 from Interface.utils import center_window, getDayWorkout
+from Data.db_configg import getRecordsFromTable
 
 class NewWorkout(QWidget):
      def __init__(self):
         super().__init__()
         #Trzeba dodac labele
+        self.add_workout = QLabel("Add new exercise", self)
+        self.add_workout.setGeometry(10,-10,450,75)
+        self.add_workout.setFont(QFont("Segoe UI", 20))
+        self.add_workout.setStyleSheet(""" 
+                                       font-weight: bold;
+                                        """)
+        
+        self.current_exercises = QLabel("Current exercises", self)
+        self.current_exercises.setGeometry(465,-10,500,75)
+        self.current_exercises.setFont(QFont("Segoe UI", 20))
+        self.current_exercises.setStyleSheet(""" 
+                                            font-weight: bold;
+                                            """)
+        
+        self.current_exercises_data = QListWidget(self)
+        self.current_exercises_data.setGeometry(480, 50, 485, 350)
+        self.current_exercises_data.setFont(QFont("Segoe UI", 13))
+        
+
+        self.exercise = QLabel("Exercise: ", self)
+        self.exercise.setGeometry(20, 50, 150, 60)
+        self.exercise.setFont(QFont("Segoe UI", 13))
+        
+        self.exercise_data = QComboBox(self)
+        self.exercise_data.addItems(getRecordsFromTable("SELECT name FROM exercises WHERE category='Push – Chest & Triceps'"))
+        self.exercise_data.setGeometry(200, 50, 275, 50)
+        self.exercise_data.setFont(QFont("Segoe UI", 10))
+        
+        self.series = QLabel("Series: ", self)
+        self.series.setGeometry(20, 100, 150, 60)
+        self.series.setFont(QFont("Segoe UI", 13))
+        
+        self.series_data = QComboBox(self)
+        self.series_data.addItems(['1','2','3','4'])
+        self.series_data.setGeometry(200, 100, 150, 50)
+        self.series_data.setFont(QFont("Segoe UI", 10))
+      
+        self.repetitions = QLabel("Repetitions: ", self)
+        self.repetitions.setGeometry(20, 150, 150, 60)
+        self.repetitions.setFont(QFont("Segoe UI", 13))
+        
+        self.repetitions_data = QLineEdit(self)
+        self.repetitions_data.setGeometry(200, 150, 150, 50)
+        self.repetitions_data.setFont(QFont("Segoe UI", 10))
+        
+        self.weight = QLabel("Weight: ", self)
+        self.weight.setGeometry(20, 200, 150, 60)
+        self.weight.setFont(QFont("Segoe UI", 13))  
+        
+        self.weight_data = QLineEdit(self)
+        self.weight_data.setGeometry(200, 200, 275, 50)
+        self.weight_data.setFont(QFont("Segoe UI", 10))
+        
+        self.notes = QLabel("Notes: ", self)
+        self.notes.setGeometry(20, 250, 150, 60)
+        self.notes.setFont(QFont("Segoe UI", 13))  
+        
+        self.notes_data = QTextEdit(self)
+        self.notes_data.setGeometry(200, 250, 275, 150)
+        self.notes_data.setFont(QFont("Segoe UI", 10))
+
         
 class Measurements(QWidget):
      def __init__(self):
@@ -115,6 +177,7 @@ class Main_Window(QMainWindow):
                                        "font-weight: bold;"
                                        "margin-left: 10px;"
                                        "margin-right: 10px;")
+        self.new_workout.clicked.connect(lambda: self.stack.setCurrentIndex(0))
         
         self.measurements = QPushButton("Measurements", self)
         self.measurements.setGeometry(250, 230, 250, 50) 
@@ -126,6 +189,7 @@ class Main_Window(QMainWindow):
                                         "font-weight: bold;"
                                         "margin-left: 10px;"
                                         "margin-right: 10px;")
+        self.measurements.clicked.connect(lambda: self.stack.setCurrentIndex(1))
         
         self.history = QPushButton("History", self)
         self.history.setGeometry(500, 230, 250, 50) 
@@ -137,6 +201,7 @@ class Main_Window(QMainWindow):
                                    "font-weight: bold;"
                                    "margin-left: 10px;"
                                    "margin-right: 10px;")
+        self.history.clicked.connect(lambda: self.stack.setCurrentIndex(2))
         
         self.goals = QPushButton("Goals", self)
         self.goals.setGeometry(750, 230, 250, 50) 
@@ -148,12 +213,11 @@ class Main_Window(QMainWindow):
                                  "font-weight: bold;"
                                  "margin-left: 10px;"
                                  "margin-right: 10px;")
+        self.goals.clicked.connect(lambda: self.stack.setCurrentIndex(3))
         
         self.central_widget = QWidget(self)
         self.central_widget.setGeometry(0, 300, 1000, 500)
         self.central_widget.setStyleSheet("""
-                                          border: 1px solid black;
-                                            border-radius: 5px;
                                             margin-left: 10px;
                                             margin-right: 10px;
                                             margin-bottom: 10px;
@@ -171,8 +235,6 @@ class Main_Window(QMainWindow):
         self.stack.addWidget(self.measurements_view)  
         self.stack.addWidget(self.history_view)       
         self.stack.addWidget(self.goals_view) 
-        
-        # dodac lambdy handle_button -> wyswietlanie widgetu itd
         
     def update_time(self):
         current_time = QTime.currentTime().toString('HH:mm:ss')
