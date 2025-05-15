@@ -2,13 +2,12 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QLabel, QWidget, QPushButton, QLineEdit, QStackedWidget, QComboBox, QTextEdit, QListWidget
 from PyQt5.QtGui import QIcon, QFont, QPixmap
 from PyQt5.QtCore import Qt, QTimer, QTime
-from Interface.utils import center_window, getDayWorkout
+from Interface.utils import center_window, getDayWorkout, getUserID
 from Data.db_configg import getRecordsFromTable
 
 class NewWorkout(QWidget):
-     def __init__(self):
+    def __init__(self):
         super().__init__()
-        #Trzeba dodac labele
         self.add_workout = QLabel("Add new exercise", self)
         self.add_workout.setGeometry(10,-10,450,75)
         self.add_workout.setFont(QFont("Segoe UI", 20))
@@ -69,8 +68,29 @@ class NewWorkout(QWidget):
         self.notes_data = QTextEdit(self)
         self.notes_data.setGeometry(200, 250, 275, 150)
         self.notes_data.setFont(QFont("Segoe UI", 10))
-
         
+        self.button_save_exercise = QPushButton("+ Add exercise", self)
+        self.button_save_exercise.setGeometry(20, 400, 230, 50)
+        self.button_save_exercise.setFont(QFont("Segoe UI", 13))
+        self.button_save_exercise.clicked.connect(self.handle_save_exercise_button)
+        
+        self.button_save_workout = QPushButton("+ Add workout", self)
+        self.button_save_workout.setGeometry(250, 400, 230, 50)
+        self.button_save_workout.setFont(QFont("Segoe UI", 13))
+        
+        
+    def handle_save_exercise_button(self):
+        user_id = int(getUserID())
+        exercise = str(self.exercise_data.currentText())
+        series = str(self.series_data.currentText())    
+        repetitions = str(self.repetitions_data.text().strip())
+        weight = str(self.weight_data.text().strip())
+        notes = str(self.notes_data.toPlainText().strip())
+        
+        # mozna dodac pozniej error handling dla null data
+        
+        self.current_exercises_data.addItem(f"{exercise} - {series} x {repetitions} @ {weight} <...>")
+    
 class Measurements(QWidget):
      def __init__(self):
         super().__init__()

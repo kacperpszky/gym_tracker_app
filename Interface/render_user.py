@@ -3,7 +3,7 @@ from PyQt5.QtGui import QIcon, QFont, QPixmap, QGuiApplication
 from PyQt5.QtCore import Qt, pyqtSignal
 from Data.db_configg import getRecordFromTable
 from Interface.render_register import *
-from Interface.utils import center_window
+from Interface.utils import center_window, setUserID, getUserID
 from Interface.render_main import Main_Window
 
 class ClickableLabel(QLabel):
@@ -64,6 +64,7 @@ class User_Window(QMainWindow):
             if result == "None":
                 QMessageBox.information(self, "No account", "User not found. Try again or create an account!")
             elif result != "None":
+                setUserID(int(result))
                 self.main_window = Main_Window(entered_username)
                 self.main_window.show()
                 self.close()

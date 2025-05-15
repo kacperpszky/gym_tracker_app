@@ -9,7 +9,9 @@ def center_window(window):
     frame_geometry = window.frameGeometry()
     frame_geometry.moveCenter(center_point)
     window.move(frame_geometry.topLeft())
-    
+
+USER_ID = 0
+   
 WORKOUT_PLAN = {
     'Monday': '🔥 Push Day – Bench & Triceps',
     'Tuesday':'🧲 Pull Day – Back & Biceps',
@@ -25,3 +27,9 @@ def getDayWorkout():
     day = str(day.strftime("%A"))
     
     return str(WORKOUT_PLAN[day])
+
+def setUserID(id):
+    USER_ID = id
+    
+def getUserID():
+    return USER_ID
